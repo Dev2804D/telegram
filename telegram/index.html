@@ -149,33 +149,42 @@
   <script src="//telegram.org/js/tgwallpaper.min.js?3"></script>
 
   <script>
-    // Initialize wallpaper
-    var tme_bg = document.getElementById('tgme_background');
-    if (tme_bg) {
-      TWallpaper.init(tme_bg);
-      TWallpaper.animate(true);
-      window.onfocus = function(){ TWallpaper.update(); };
-    }
-    document.body.classList.remove('no_transition');
+  // Initialize Telegram wallpaper
+  var tme_bg = document.getElementById('tgme_background');
+  if (tme_bg) {
+    TWallpaper.init(tme_bg);
+    TWallpaper.animate(true);
+    window.onfocus = function(){ TWallpaper.update(); };
+  }
+  document.body.classList.remove('no_transition');
 
-    // Dark mode toggle
-    function toggleTheme(dark) {
-      document.documentElement.classList.toggle('theme_dark', dark);
-      window.Telegram && Telegram.setWidgetOptions({dark: dark});
-    }
-    if (window.matchMedia) {
-      var darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
-      toggleTheme(darkMedia.matches);
-      darkMedia.addListener(function(e) {
-        toggleTheme(e.matches);
-      });
-    }
+  // Dark mode handling
+  function toggleTheme(dark) {
+    document.documentElement.classList.toggle('theme_dark', dark);
+    window.Telegram && Telegram.setWidgetOptions({ dark: dark });
+  }
+  if (window.matchMedia) {
+    var darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
+    toggleTheme(darkMedia.matches);
+    darkMedia.addEventListener('change', function(e) {
+      toggleTheme(e.matches);
+    });
+  }
 
-    // Auto-redirect to Telegram after 2 seconds
+  // Detect if user is on mobile
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // Directly open Telegram app on mobile
+    window.location.href = "tg://resolve?domain=offer_lootera_official";
+  } else {
+    // Optional: Auto-redirect after 2s for desktop
     setTimeout(function() {
-      window.location = "tg://resolve?domain=offer_lootera_official";
+      window.location.href = "tg://resolve?domain=offer_lootera_official";
     }, 2000);
-  </script>
+  }
+</script>
+
 
 </body>
 </html>
